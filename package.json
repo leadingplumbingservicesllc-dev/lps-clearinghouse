@@ -1,0 +1,60 @@
+{
+  "name": "lps-clearinghouse",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "prisma generate && next build",
+    "start": "next start --hostname 0.0.0.0",
+    "typecheck": "prisma generate && tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "test:contracts": "hardhat test",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:generate": "prisma generate",
+    "scrape": "tsx scripts/scraper-florida-liens.ts",
+    "worker": "tsx scripts/outreach-worker.ts",
+    "deploy:contracts": "hardhat run scripts/deploy-contracts.cjs --network configured"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@openzeppelin/contracts": "^5.4.0",
+    "@prisma/adapter-pg": "^6.19.3",
+    "@prisma/client": "^6.19.0",
+    "@radix-ui/react-slot": "^1.2.3",
+    "cheerio": "^1.1.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "dotenv": "^18.0.9",
+    "ethers": "^6.15.0",
+    "next": "^16.4.3",
+    "nodemailer": "^10.3.1",
+    "pdfkit": "^0.17.0",
+    "pg": "^8.23.1",
+    "playwright": "^1.56.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.1.0",
+    "@types/node": "^22.0.0",
+    "@types/nodemailer": "^7.0.0",
+    "@types/pdfkit": "^0.17.0",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.0",
+    "hardhat": "^2.26.0",
+    "postcss": "^8.5.0",
+    "prettier": "^3.9.10",
+    "prisma": "^6.19.0",
+    "solc": "0.8.38",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  },
+  "overrides": {
+    "deepmerge-ts": "^8.0.0"
+  }
+}

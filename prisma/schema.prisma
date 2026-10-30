@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+  engineType = "client"
+}
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+model Lien {
+  id String @id @default(cuid())
+  county String
+  instrumentNumber String @map("instrument_number")
+  documentType String
+  bookPage String?
+  recordingDate DateTime
+  grantor String
+  grantee String
+  amountCents BigInt
+  legalDescription String
+  siteAddress String
+  parcelId String?
+  sourceUrl String
+  sourceDigest String
+  verifiedAt DateTime?
+  createdAt DateTime @default(now())
+  campaigns Campaign[]
+  @@unique([county, instrumentNumber])
+  @@index([recordingDate])
+}
+model Campaign {
+  id String @id @default(cuid())
+  lienId String
+  lien Lien @relation(fields: [lienId], references: [id])
+  email String
+  contactSource String
+  contactVerifiedAt DateTime
+  subject String
+  body String
+  underwriting Json
+  status String @default("PENDING_REVIEW")
+  approvedAt DateTime?
+  sentAt DateTime?
+  nextAttemptAt DateTime @default(now())
+  attempts Int @default(0)
+  leaseUntil DateTime?
+  messageId String? @unique
+  lastError String?
+  tokenHash String @unique
+  tokenExpiresAt DateTime
+  tokenCiphertext String
+  assignmentText String
+  assignmentDigest String
+  acceptedAt DateTime?
+  signerName String?
+  signerWallet String?
+  walletSignature String?
+  openedAt DateTime?
+  bouncedAt DateTime?
+  events MailEvent[]
+  @@unique([lienId, email])
+  @@index([status, nextAttemptAt])
+}
+model Suppression {
+  email String @id
+  reason String
+  createdAt DateTime @default(now())
+}
+model MailEvent {
+  id String @id
+  campaignId String
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  type String
+  createdAt DateTime @default(now())
+}
+model RiskReport {
+  id String @id @default(cuid())
+  tokenHash String @unique
+  address String
+  evidence Json
+  analysis Json
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+model RateBucket {
+  key String @id
+  count Int @default(0)
+  resetAt DateTime
+}
